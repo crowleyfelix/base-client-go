@@ -1,0 +1,7 @@
+{
+    "key": "CacheSettings:ChangeHistorySettings:TimeoutInMinutes",
+    "value": "60",
+    "description": "Timeout de expiração do cache para as configurações do CadU Change History API",
+    "createdOn": "2017-10-20T19:17:56.439",
+    "lastModifiedOn": "2017-10-20T19:17:56.439"
+}

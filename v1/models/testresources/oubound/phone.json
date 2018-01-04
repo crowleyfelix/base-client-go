@@ -1,0 +1,12 @@
+{
+    "key": "0A1B28D5-CB37-4286-B3D2-79A29EB78340",
+    "typeId": 2,
+    "type": {
+        "id": 2,
+        "name": "two"
+    },
+    "countryCode": "55",
+    "areaCode": "21",
+    "phoneNumber": "22003300",
+    "extension": "33"
+}

@@ -1,0 +1,24 @@
+{
+  "key": "0A1B28D5-CB37-4286-B3D2-79A29EB78340",
+  "typeId": 2,
+  "type": {
+    "id": 2,
+    "name": "Administrativo"
+  },
+  "streetName": "Rua 2",
+  "entranceNumber": 12,
+  "neighborhood": "Centro 2",
+  "postalCode": "12345-672",
+  "complement": "Complement",
+  "commercialCenterName": "CommercialCenterName 2",
+  "nearestLandmark": "NearestLandmark 2",
+  "cityName": "São Paulo",
+  "countryId": 76,
+  "country": {
+    "id": 76,
+    "name": "Brazil",
+    "iso31661Alpha3": "BRA",
+    "iso31661Alpha2": "BR"
+  },
+  "countrySubdivisionCode": "SP"
+}

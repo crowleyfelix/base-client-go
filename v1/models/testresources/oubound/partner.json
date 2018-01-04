@@ -1,0 +1,106 @@
+{
+    "naturalPerson": {
+        "key": "0A1B28D5-CB37-4286-B3D2-79A29EB78340",
+        "ownershipPercentage": 0.25,
+        "taxId": "97557466926",
+        "taxIdTypeId": 2,
+        "taxIdType": {
+            "id": 2,
+            "name": "CPF"
+        },
+        "name": "José Alves Junior",
+        "birthDate": "1984-02-07",
+        "birthPlace": "Rio de Janeiro",
+        "birthCountryId": 76,
+        "birthCountry": {
+            "id": 76,
+            "name": "Brazil",
+            "iso31661Alpha3": "BRA",
+            "iso31661Alpha2": "BR"
+        },
+        "fatherName": "José Alves Camargo",
+        "motherName": "Maria Sandra Alves",
+        "spouseTaxId": "13415229548",
+        "spouseTaxIdTypeId": 2,
+        "spouseTaxIdType": {
+            "id": 2,
+            "name": "CPF"
+        },
+        "spouseName": "Brenda Carvalho",
+        "addresses": [
+            {
+                "key": "0A1B28D5-CB37-4286-B3D2-79A29EB78340",
+                "typeId": 2,
+                "type": {
+                    "id": 2,
+                    "name": "Administrativo"
+                },
+                "streetName": "Rua 2",
+                "entranceNumber": 12,
+                "neighborhood": "Centro 2",
+                "postalCode": "12345-672",
+                "complement": "Complement",
+                "commercialCenterName": "CommercialCenterName 2",
+                "nearestLandmark": "NearestLandmark 2",
+                "cityName": "São Paulo",
+                "countryId": 76,
+                "country": {
+                    "id": 76,
+                    "name": "Brazil",
+                    "iso31661Alpha3": "BRA",
+                    "iso31661Alpha2": "BR"
+                },
+                "countrySubdivisionCode": "SP"
+            }
+        ]
+    },
+    "juridicalPerson": {
+        "key": "0A1B28D5-CB37-4286-B3D2-79A29EB78340",
+        "legalName": "Campbelo Gestão de Recursos S.A.",
+        "tradeName": "Campbelo Gestora",
+        "taxId": "43836121000180",
+        "taxIdTypeId": 1,
+        "taxIdType": {
+            "id": 1,
+            "name": "CNPJ"
+        },
+        "legalPersonalityId": 1,
+        "legalPersonality": {
+            "id": 1,
+            "name": "Pessoa Jurídica"
+        },
+        "stateInscription": "SP",
+        "taxIdRegistrationDate": "2012-12-04T00:00:00",
+        "municipalInscription": "São Paulo",
+        "websiteUrl": "campbelo.com.br",
+        "estimatedMonthlyBilling": 2000,
+        "averageTicket": 150,
+        "ownershipPercentage": 0.85,
+        "addresses": [
+            {
+                "key": "0A1B28D5-CB37-4286-B3D2-79A29EB78340",
+                "typeId": 2,
+                "type": {
+                    "id": 2,
+                    "name": "Administrativo"
+                },
+                "streetName": "Rua 2",
+                "entranceNumber": 12,
+                "neighborhood": "Centro 2",
+                "postalCode": "12345-672",
+                "complement": "Complement",
+                "commercialCenterName": "CommercialCenterName 2",
+                "nearestLandmark": "NearestLandmark 2",
+                "cityName": "São Paulo",
+                "countryId": 76,
+                "country": {
+                    "id": 76,
+                    "name": "Brazil",
+                    "iso31661Alpha3": "BRA",
+                    "iso31661Alpha2": "BR"
+                },
+                "countrySubdivisionCode": "SP"
+            }
+        ]
+    }
+}
