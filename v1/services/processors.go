@@ -16,14 +16,14 @@ func processResponse(resp http.Response) (*response, error) {
 			err = errors.NewSerializing(e.Error())
 		}
 	} else {
-		err = s.trackError(resp)
+		err = trackError(resp)
 	}
 
 	return &r, err
 }
 
 func trackError(resp http.Response) error {
-	messages := s.errorMessages(resp)
+	messages := errorMessages(resp)
 	return errors.Build(resp.StatusCode(), messages...)
 }
 

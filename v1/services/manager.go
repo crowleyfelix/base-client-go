@@ -11,9 +11,9 @@ import (
 )
 
 type manager struct {
-	baseURL     string
-	credentials Credentials
-	processors  []http.Processable
+	baseURL      string
+	credentials  Credentials
+	interceptors []http.Interceptor
 }
 
 func (s *manager) Requester() http.Requestable {
@@ -33,28 +33,22 @@ func (s *manager) BuildURL(endpoint string, params ...interface{}) string {
 	return s.baseURL + fmt.Sprintf(endpoint, params...)
 }
 
-func (s *manager) Request(method http.RequestMethod, url string, request http.Request, processors ...http.Processable) (http.Response, error) {
-	resp, err := method(url, request)
+func (s *manager) Request(method http.RequestMethod, url string, request http.Request, interceptors ...http.Interceptor) (http.Response, errors.Error) {
+	interceptors = s.allInterceptors(interceptors...)
 
-	if err != nil {
-		return nil, errors.NewCallout(err.Error())
-	}
-
-	processors = s.allProcessors(processors...)
-
-	for _, processor := range processors {
-		request = processor.OnRequest(request)
+	for _, interceptor := range interceptors {
+		request = interceptor.OnRequest(request)
 	}
 
 	if resp, e := method(url, request); e != nil {
-		log.Error(fmt.Sprintf("Failed httping %s. Message: %s", url, e.Error()))
-		return nil, errors.NewInternalServer(e.Error())
+		log.Error(fmt.Sprintf("Failed requesting %s. Message: %s", url, e.Error()))
+		return nil, errors.NewCallout(e.Error())
 
 	} else {
 
 		var err error
-		for _, processor := range processors {
-			resp, err = processor.OnResponse(resp)
+		for _, interceptor := range interceptors {
+			resp, err = interceptor.OnResponse(resp)
 
 			if err != nil {
 				break
@@ -65,10 +59,10 @@ func (s *manager) Request(method http.RequestMethod, url string, request http.Re
 	}
 }
 
-func (s *manager) allProcessors(processors ...http.Processable) []http.Processable {
-	var all []http.Processable
-	all = append(all, s.processors...)
-	all = append(all, processors...)
+func (s *manager) allInterceptors(interceptors ...http.Interceptor) []http.Interceptor {
+	var all []http.Interceptor
+	all = append(all, s.interceptors...)
+	all = append(all, interceptors...)
 	return all
 }
 

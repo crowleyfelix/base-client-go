@@ -1,0 +1,44 @@
+package http
+
+import "github.com/stone-payments/logistic-sdk-go/errors"
+
+//Interceptor exposes interceptor methods
+type Interceptor interface {
+	OnRequest(Request) Request
+	OnResponse(Response) (Response, errors.HTTPError)
+}
+
+type interceptor struct {
+	onRequestCallback  func(Request) Request
+	onResponseCallback func(Response) (Response, errors.HTTPError)
+}
+
+//OnRequestCallback define request callback interceptor assignature
+type OnRequestCallback func(Request) Request
+
+//OnResponseCallback define response callback interceptor assignature
+type OnResponseCallback func(Response) (Response, errors.HTTPError)
+
+//NewInterceptor constructs interceptor
+func NewInterceptor(onRequestCallback OnRequestCallback, onResponseCallback OnResponseCallback) Interceptor {
+	return &interceptor{
+		onRequestCallback,
+		onResponseCallback,
+	}
+}
+
+func (p *interceptor) OnRequest(request Request) Request {
+	if p.onRequestCallback != nil {
+		return p.onRequestCallback(request)
+	}
+
+	return request
+}
+
+func (p *interceptor) OnResponse(response Response) (Response, errors.HTTPError) {
+	if p.onResponseCallback != nil {
+		return p.onResponseCallback(response)
+	}
+
+	return response, nil
+}
