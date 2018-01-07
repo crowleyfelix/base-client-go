@@ -5,10 +5,10 @@ import (
 	"github.com/stone-payments/logistic-sdk-go/http"
 )
 
-func processResponse(resp http.Response) (*response, error) {
+func processResponse(resp http.Response) (http.Response, errors.Error) {
 	var (
 		r   response
-		err error
+		err errors.Error
 	)
 
 	if resp.Ok() {
@@ -19,10 +19,10 @@ func processResponse(resp http.Response) (*response, error) {
 		err = trackError(resp)
 	}
 
-	return &r, err
+	return http.SwitchBody(resp, r.Data), err
 }
 
-func trackError(resp http.Response) error {
+func trackError(resp http.Response) errors.Error {
 	messages := errorMessages(resp)
 	return errors.Build(resp.StatusCode(), messages...)
 }

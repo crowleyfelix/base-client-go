@@ -1,15 +1,15 @@
 package services
 
 import (
-	"github.com/stone-payments/CaduGO/v1/models"
 	"github.com/stone-payments/logistic-sdk-go/errors"
 	"github.com/stone-payments/logistic-sdk-go/http"
+	"github.com/stone-payments/logistic-sdk-go/v1/models"
 )
 
 //ServiceOrder abstracts service orders CRUD
 type ServiceOrder interface {
 	Get(string) (*models.ServiceOrder, errors.Error)
-	ByStoneCode(int) ([]models.ServiceOrders, *models.Paging, errors.Error)
+	ByStoneCode(int) ([]models.ServiceOrder, errors.Error)
 }
 
 type serviceOrder struct {
@@ -30,43 +30,41 @@ func NewServiceOrder(url string, credentials *Credentials) ServiceOrder {
 	}
 }
 
-func (r *serviceOrder) Get(key string) (*models.ServiceOrder, error) {
+func (r *serviceOrder) Get(key string) (*models.ServiceOrder, errors.Error) {
 	var serviceOrder models.ServiceOrder
 	endPointURL := r.BuildURL(serviceOrdersEndpoint, key)
 
-	resp, err := r.Request(r.Requester().Get, endPointURL, r.Options("GET", endPointURL))
+	resp, err := r.Request(r.Requester().Get, endPointURL, r.RequestOptions("GET", endPointURL))
 
 	if err == nil {
-		err = resp.UnmarshalData(&serviceOrder)
+		err = resp.JSON(&serviceOrder)
 	}
 
 	return &serviceOrder, err
 }
 
-func (r *serviceOrder) List() ([]models.ServiceOrder, *models.Paging, error) {
-	var members []models.ServiceOrder
+func (r *serviceOrder) List() ([]models.ServiceOrder, error) {
+	var serviceOrders []models.ServiceOrder
 	endPointURL := r.BuildURL(serviceOrdersEndpoint)
 
-	resp, err := r.Request(r.Requester().Get, endPointURL, r.Options("GET", endPointURL))
-
-	if err != nil {
-		return members, nil, err
-	}
-
-	err = resp.UnmarshalData(&members)
-
-	return members, resp.Paging, err
-}
-
-func (r *serviceOrder) ByStoneCode(stonecode int) ([]models.ServiceOrders, *models.Paging, errors.Error) {
-	var serviceOrders []models.ServiceOrder
-	endPointURL := r.BuildURL(merchantServiceOrderEndpoint, key)
-
-	resp, err := r.Request(r.Requester().Get, endPointURL, r.Options("GET", endPointURL))
+	resp, err := r.Request(r.Requester().Get, endPointURL, r.RequestOptions("GET", endPointURL))
 
 	if err == nil {
-		err = resp.UnmarshalData(&serviceOrders)
+		err = resp.JSON(&serviceOrders)
 	}
 
-	return nil, serviceOrders, err
+	return serviceOrders, err
+}
+
+func (r *serviceOrder) ByStoneCode(stonecode int) ([]models.ServiceOrder, errors.Error) {
+	var serviceOrders []models.ServiceOrder
+	endPointURL := r.BuildURL(merchantServiceOrdersEndpoint, stonecode)
+
+	resp, err := r.Request(r.Requester().Get, endPointURL, r.RequestOptions("GET", endPointURL))
+
+	if err == nil {
+		err = resp.JSON(&serviceOrders)
+	}
+
+	return serviceOrders, err
 }

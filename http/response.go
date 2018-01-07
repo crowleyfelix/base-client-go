@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/levigross/grequests"
+	"github.com/stone-payments/logistic-sdk-go/errors"
 )
 
 //Response exposes http response methods
@@ -14,7 +15,7 @@ type Response interface {
 	RawResponse() *http.Response
 	StatusCode() int
 	Header() http.Header
-	JSON(interface{}) error
+	JSON(interface{}) errors.Error
 	ClearInternalBuffer()
 	Close() error
 	Read([]byte) (int, error)
@@ -39,4 +40,11 @@ func (r *response) StatusCode() int {
 }
 func (r *response) Header() http.Header {
 	return r.Response.Header
+}
+func (r *response) JSON(obj interface{}) errors.Error {
+	err := r.JSON(obj)
+	if err != nil {
+		return errors.NewSerializing(err.Error())
+	}
+	return nil
 }

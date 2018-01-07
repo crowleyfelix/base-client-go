@@ -5,7 +5,7 @@ import (
 )
 
 //Build returns an error based on http status code
-func Build(statusCode int, messages ...string) error {
+func Build(statusCode int, messages ...string) HTTPError {
 	switch statusCode {
 	default:
 		return NewInternalServer(messages...)

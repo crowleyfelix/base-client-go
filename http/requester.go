@@ -24,7 +24,7 @@ func NewRequester() Requestable {
 
 //Get is the method wrapper of grequests
 func (r requester) Get(url string, request Request) (Response, error) {
-	opt, err := r.requestRequest(request)
+	opt, err := r.requestOptions(request)
 
 	if err != nil {
 		return nil, err
@@ -36,7 +36,7 @@ func (r requester) Get(url string, request Request) (Response, error) {
 
 //Post is the method wrapper of grequests
 func (r requester) Post(url string, request Request) (Response, error) {
-	opt, err := r.requestRequest(request)
+	opt, err := r.requestOptions(request)
 
 	if err != nil {
 		return nil, err
@@ -48,7 +48,7 @@ func (r requester) Post(url string, request Request) (Response, error) {
 
 //Put is the method wrapper of grequests
 func (r requester) Put(url string, request Request) (Response, error) {
-	opt, err := r.requestRequest(request)
+	opt, err := r.requestOptions(request)
 
 	if err != nil {
 		return nil, err
@@ -60,7 +60,7 @@ func (r requester) Put(url string, request Request) (Response, error) {
 
 //Delete is the method wrapper of grequests
 func (r requester) Delete(url string, request Request) (Response, error) {
-	opt, err := r.requestRequest(request)
+	opt, err := r.requestOptions(request)
 
 	if err != nil {
 		return nil, err
@@ -70,7 +70,7 @@ func (r requester) Delete(url string, request Request) (Response, error) {
 	return &response{resp}, err
 }
 
-func (r requester) requestRequest(req Request) (*grequests.RequestOptions, error) {
+func (r requester) requestOptions(req Request) (*grequests.RequestOptions, error) {
 	if r, ok := req.(*request); ok {
 		return &r.RequestOptions, nil
 	}
