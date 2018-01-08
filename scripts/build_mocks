@@ -2,24 +2,22 @@
 
 PACKAGE="github.com/stone-payments/logistic-sdk"
 DEFAULT_PACKAGE="mocks"
-DEFAULT_PATH="basetesting/$DEFAULT_PACKAGE"
 
 echo "--> building mocks <--"
 
 function build () {
-    dest="$DEFAULT_PATH"
+    dest="$1/$DEFAULT_PACKAGE"
 
     if [ ! -d "$dest" ]; then
         mkdir $dest
     fi
 
-    dest="$dest/$2.go"
-
-    echo "building mocks for $3 to $dest"
-
-    mockgen -destination=$dest -package=$DEFAULT_PACKAGE $PACKAGE/$1 $3
+    echo "building mocks for $2 to $dest"
+    mockery -dir=$1 -name=$2 --output=$dest -case=underscore
 }
 
 # Register mock builds here
-# build SOURCE_PACKAGE OUTPUT_FILE INTERFACE1,INTERFACE2 
-build request requester Requestable
+# build SOURCE_PACKAGE INTERFACE
+build http Requestable
+build http Interceptor
+build v1 Client
