@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/namsral/flag"
 )
 
@@ -19,6 +20,11 @@ const (
 )
 
 func (c *config) Load() {
+
+	if err := godotenv.Load(); err != nil {
+		println("Error loading .env file")
+	}
+
 	fs := flag.NewFlagSet(os.Args[0], 0)
 	fs.StringVar(&c.URL, "url", "", "Url do Cadu")
 	fs.StringVar(&c.AppKey, "app_key", "", "Application Key do Cadu")
