@@ -46,7 +46,7 @@ func (s *manager) Request(method http.RequestMethod, url string, request http.Re
 
 	} else {
 
-		var err error
+		var err errors.Error
 		for _, interceptor := range interceptors {
 			resp, err = interceptor.OnResponse(resp)
 
@@ -61,6 +61,7 @@ func (s *manager) Request(method http.RequestMethod, url string, request http.Re
 
 func (s *manager) allInterceptors(interceptors ...http.Interceptor) []http.Interceptor {
 	var all []http.Interceptor
+	inject.FindAssignable(logisticsdk.Graph, &all)
 	all = append(all, s.interceptors...)
 	all = append(all, interceptors...)
 	return all
