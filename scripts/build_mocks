@@ -1,6 +1,5 @@
 #!/bin/bash
 
-PACKAGE="github.com/stone-payments/logistic-sdk"
 DEFAULT_PACKAGE="mocks"
 
 echo "--> building mocks <--"
