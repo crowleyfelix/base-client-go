@@ -8,6 +8,8 @@ import (
 type Request interface {
 	SetHeaders(map[string]string)
 	Headers() map[string]string
+	SetParams(map[string]string)
+	Params() map[string]string
 	SetJSON(interface{})
 	JSON() interface{}
 }
@@ -28,6 +30,14 @@ func (r *request) SetHeaders(headers map[string]string) {
 
 func (r *request) Headers() map[string]string {
 	return r.RequestOptions.Headers
+}
+
+func (r *request) SetParams(params map[string]string) {
+	r.RequestOptions.Params = params
+}
+
+func (r *request) Params() map[string]string {
+	return r.RequestOptions.Params
 }
 
 func (r *request) SetJSON(data interface{}) {
