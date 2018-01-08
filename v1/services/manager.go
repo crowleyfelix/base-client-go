@@ -12,7 +12,6 @@ import (
 
 type manager struct {
 	baseURL      string
-	credentials  Credentials
 	interceptors []http.Interceptor
 }
 
@@ -70,8 +69,6 @@ func (s *manager) allInterceptors(interceptors ...http.Interceptor) []http.Inter
 func (s *manager) headers(httpMethod string, url string) map[string]string {
 
 	return map[string]string{
-		"Authorization":   s.credentials.Signature(httpMethod, url),
-		"User-Identifier": s.credentials.User,
-		"Content-Type":    "application/json",
+		"Authorization": "",
 	}
 }

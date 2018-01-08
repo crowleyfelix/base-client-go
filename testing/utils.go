@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 
 	. "github.com/onsi/gomega"
-	"github.com/stretchr/testify/suite"
 )
 
 func File(path string) []byte {
@@ -15,7 +14,7 @@ func File(path string) []byte {
 }
 
 func LoadJSON(path string, target interface{}) {
-	blob := suite.File(path)
+	blob := File(path)
 	err := json.Unmarshal(blob, &target)
 	Expect(err).Should(BeNil())
 }
