@@ -10,18 +10,16 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/stone-payments/logistic-sdk-go"
+	"github.com/stone-payments/logistic-sdk-go/errors"
 	"github.com/stone-payments/logistic-sdk-go/http"
 	"github.com/stone-payments/logistic-sdk-go/http/mocks"
+	"github.com/stone-payments/logistic-sdk-go/v1/models"
 )
 
 var _ = Describe("Member", func() {
 
 	var (
 		baseURL   = "http://url"
-		appKey    = "appKey"
-		secretKey = "secretKey"
-		user      = "user"
-		signature = "signature"
 		requester = new(mocks.Requestable)
 		request   = new(mocks.Request)
 		response  *mocks.Response
@@ -37,10 +35,12 @@ var _ = Describe("Member", func() {
 
 		service = serviceOrder{
 			&manager{
-				baseURL:     baseURL,
-				credentials: &Credentials{secretKey, appKey, user},
+				baseURL: baseURL,
 			},
 		}
+	})
+	AfterSuite(func() {
+		monkey.UnpatchAll()
 	})
 
 	Describe("Get", func() {
@@ -49,30 +49,37 @@ var _ = Describe("Member", func() {
 			id string
 		)
 
-		//output
 		var (
-			err error
+			requestError error
 		)
 
+		//output
+		var (
+			data *models.ServiceOrder
+			err  error
+		)
+		JustBeforeEach(func() {
+			data, err = service.Get(id)
+		})
 		BeforeEach(func() {
 			id = strconv.Itoa(rand.Int())
-			url := fmt.Sprintf("%s/serviceorders/%s", baseURL, id)
+			url := fmt.Sprintf("%s/v1/serviceorders/%s", baseURL, id)
 			requester.On("Get", url, request).
-				Return(response, err).Once()
-			service.Get(id)
+				Return(response, requestError).Once()
 		})
-		Context("When sending request", func() {
-			It("should pass url builded", func() {
-
-				Expect(actualURL).Should(Equal(expect))
+		Describe("When sending request", func() {
+			Context("and failed", func() {
+				BeforeEach(func() {
+					requestError = fmt.Errorf("falhou")
+				})
+				It("should return an error", func() {
+					Expect(err).ToNot(BeNil())
+				})
 			})
-			It("should pass credentials in options", func() {
-				expect := map[string]string{
-					"Contentoutput-Type": "application/json",
-					"Authorization":      signature,
-					"User-Identifier":    user,
-				}
-				Expect(actualOptions.Headers).Should(Equal(expect))
+			Context("and success", func() {
+				It("should return service order", func() {
+
+				})
 			})
 		})
 	})
@@ -82,59 +89,81 @@ var _ = Describe("Member", func() {
 			stonecode int
 		)
 
-		//output
+		//context
 		var (
-			err error
+			requestError error
 		)
 
+		//output
+		var (
+			data []models.ServiceOrder
+			err  error
+		)
+
+		JustBeforeEach(func() {
+			data, err = service.ByStoneCode(stonecode)
+		})
 		BeforeEach(func() {
 			stonecode = rand.Int()
-			url := fmt.Sprintf("%s/merchants/%d/serviceorders", baseURL, stonecode)
+			url := fmt.Sprintf("%s/v1/merchants/%d/serviceorders", baseURL, stonecode)
 			requester.On("Get", url, request).
 				Return(response).Once()
-			service.ByStoneCode(stonecode)
 		})
 		Context("When sending request", func() {
-			It("should pass url builded", func() {
-				expect := fmt.Sprintf("%s/merchants/%d/serviceorders", baseURL, stonecode)
-				Expect(actualURL).Should(Equal(expect))
+			Context("and failed", func() {
+				BeforeEach(func() {
+					requestError = fmt.Errorf("falhou")
+				})
+				It("should return an error", func() {
+					Expect(err).ToNot(BeNil())
+				})
 			})
-			It("should pass credentials in options", func() {
-				expect := map[string]string{
-					"Content-Type":    "application/json",
-					"Authorization":   signature,
-					"User-Identifier": user,
-				}
-				Expect(actualOptions.Headers).Should(Equal(expect))
+			Context("and success", func() {
+				It("should return service orders", func() {
+
+				})
 			})
 		})
 	})
 	Describe("List", func() {
 
 		//input
-		var ()
+		var (
+			filters *models.ServiceOrderFilters
+		)
+
+		//context
+		var (
+			requestError error
+		)
 
 		//output
-		var ()
+		var (
+			data []models.ServiceOrder
+			err  errors.Error
+		)
 
+		JustBeforeEach(func() {
+			data, err = service.List(filters)
+		})
 		BeforeEach(func() {
-			url := fmt.Sprintf("%s/serviceorders", baseURL)
+			url := fmt.Sprintf("%s/v1/serviceorders", baseURL)
 			requester.On("Get", url, request).
 				Return(response).Once()
-			service.List()
 		})
 		Context("When sending request", func() {
-			It("should pass url builded", func() {
-				expect := fmt.Sprintf("%s/serviceorders", baseURL)
-				Expect(actualURL).Should(Equal(expect))
+			Context("and failed", func() {
+				BeforeEach(func() {
+					requestError = fmt.Errorf("falhou")
+				})
+				It("should return an error", func() {
+					Expect(err).ToNot(BeNil())
+				})
 			})
-			It("should pass credentials in options", func() {
-				expect := map[string]string{
-					"Content-Type":    "application/json",
-					"Authorization":   signature,
-					"User-Identifier": user,
-				}
-				Expect(actualOptions.Headers).Should(Equal(expect))
+			Context("and success", func() {
+				It("should return service orders", func() {
+
+				})
 			})
 		})
 	})
