@@ -1,7 +1,5 @@
 package models
 
-import "encoding/json"
-
 type ServiceOrderFilters struct {
 	Page                      string `json:"page"`
 	Size                      string `json:"size"`
@@ -23,12 +21,4 @@ type ServiceOrderFilters struct {
 	Sync                      string `json:"sync"`
 	StartDateLastModification string `json:"start_date_last_modification"`
 	EndDateLastModification   string `json:"end_date_last_modification"`
-}
-
-func (sf *ServiceOrderFilters) ToMap() map[string]string {
-	var mapString map[string]string
-
-	data, _ := json.Marshal(sf)
-	json.Unmarshal(data, &mapString)
-	return mapString
 }
