@@ -14,27 +14,21 @@ type ServiceOrder interface {
 }
 
 type serviceOrder struct {
-	*manager
+	manager http.Manager
 }
 
 //NewServiceOrder is constructs ServiceOrder Service
 func NewServiceOrder(url string) ServiceOrder {
-
-	interceptor := http.NewInterceptor(nil, processResponse)
-
 	return &serviceOrder{
-		&manager{
-			baseURL:      url,
-			interceptors: []http.Interceptor{interceptor},
-		},
+		manager: http.NewManager(url, http.NewInterceptor(nil, processResponse)),
 	}
 }
 
 func (r *serviceOrder) Get(id string) (*models.ServiceOrder, errors.Error) {
 	var serviceOrder models.ServiceOrder
-	endPointURL := r.BuildURL(serviceOrdersEndpoint, id)
+	endPointURL := r.manager.BuildURL(serviceOrdersEndpoint, id)
 
-	resp, err := r.Request(r.Requester().Get, endPointURL, r.RequestOptions("GET", endPointURL))
+	resp, err := r.manager.Request(http.Requester.Get, endPointURL, http.NewRequest())
 
 	if err == nil {
 		err = resp.JSON(&serviceOrder)
@@ -45,12 +39,12 @@ func (r *serviceOrder) Get(id string) (*models.ServiceOrder, errors.Error) {
 
 func (r *serviceOrder) List(filters *models.ServiceOrderFilters) ([]models.ServiceOrder, errors.Error) {
 	var serviceOrders []models.ServiceOrder
-	endPointURL := r.BuildURL(serviceOrdersEndpoint)
+	endPointURL := r.manager.BuildURL(serviceOrdersEndpoint)
 
-	options := r.RequestOptions("GET", endPointURL)
+	options := http.NewRequest()
 	options.SetParams(filters.ToMap())
 
-	resp, err := r.Request(r.Requester().Get, endPointURL, options)
+	resp, err := r.manager.Request(http.Requester.Get, endPointURL, options)
 
 	if err == nil {
 		err = resp.JSON(&serviceOrders)
@@ -61,9 +55,9 @@ func (r *serviceOrder) List(filters *models.ServiceOrderFilters) ([]models.Servi
 
 func (r *serviceOrder) ByStoneCode(stonecode int) ([]models.ServiceOrder, errors.Error) {
 	var serviceOrders []models.ServiceOrder
-	endPointURL := r.BuildURL(merchantServiceOrdersEndpoint, stonecode)
+	endPointURL := r.manager.BuildURL(merchantServiceOrdersEndpoint, stonecode)
 
-	resp, err := r.Request(r.Requester().Get, endPointURL, r.RequestOptions("GET", endPointURL))
+	resp, err := r.manager.Request(http.Requester.Get, endPointURL, http.NewRequest())
 
 	if err == nil {
 		err = resp.JSON(&serviceOrders)

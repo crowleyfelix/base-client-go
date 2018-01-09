@@ -17,11 +17,6 @@ type Requestable interface {
 
 type requester struct{}
 
-//NewRequester returns requester constructed
-func NewRequester() Requestable {
-	return new(requester)
-}
-
 //Get is the method wrapper of grequests
 func (r requester) Get(url string, request Request) (Response, error) {
 	opt, err := r.requestOptions(request)
