@@ -8,9 +8,9 @@ import (
 
 //ServiceOrder abstracts service orders CRUD
 type ServiceOrder interface {
-	Get(string) (*models.ServiceOrder, errors.Error)
-	ByStoneCode(int) ([]models.ServiceOrder, errors.Error)
-	List(*models.ServiceOrderFilters) ([]models.ServiceOrder, errors.Error)
+	Get(int) (*models.ServiceOrder, errors.Error)
+	ByStoneCode(string) (*models.ServiceOrdersPage, errors.Error)
+	List(*models.ServiceOrderFilters) (*models.ServiceOrdersPage, errors.Error)
 }
 
 type serviceOrder struct {
@@ -24,9 +24,9 @@ func NewServiceOrder(url string) ServiceOrder {
 	}
 }
 
-func (r *serviceOrder) Get(id string) (*models.ServiceOrder, errors.Error) {
+func (r *serviceOrder) Get(serviceNumber int) (*models.ServiceOrder, errors.Error) {
 	var serviceOrder models.ServiceOrder
-	endPointURL := r.manager.BuildURL(serviceOrderEndpoint, id)
+	endPointURL := r.manager.BuildURL(serviceOrderEndpoint, serviceNumber)
 
 	resp, err := r.manager.Request(http.Requester.Get, endPointURL, http.NewRequest())
 
@@ -37,12 +37,12 @@ func (r *serviceOrder) Get(id string) (*models.ServiceOrder, errors.Error) {
 	return &serviceOrder, err
 }
 
-func (r *serviceOrder) List(filters *models.ServiceOrderFilters) ([]models.ServiceOrder, errors.Error) {
-	var serviceOrders []models.ServiceOrder
+func (r *serviceOrder) List(filters *models.ServiceOrderFilters) (*models.ServiceOrdersPage, errors.Error) {
+	var serviceOrders models.ServiceOrdersPage
 	endPointURL := r.manager.BuildURL(serviceOrdersEndpoint)
 
 	options := http.NewRequest()
-	options.SetParams(filters.ToMap())
+	options.SetParams(http.ToMap(filters))
 
 	resp, err := r.manager.Request(http.Requester.Get, endPointURL, options)
 
@@ -50,11 +50,11 @@ func (r *serviceOrder) List(filters *models.ServiceOrderFilters) ([]models.Servi
 		err = resp.JSON(&serviceOrders)
 	}
 
-	return serviceOrders, err
+	return &serviceOrders, err
 }
 
-func (r *serviceOrder) ByStoneCode(stonecode int) ([]models.ServiceOrder, errors.Error) {
-	var serviceOrders []models.ServiceOrder
+func (r *serviceOrder) ByStoneCode(stonecode string) (*models.ServiceOrdersPage, errors.Error) {
+	var serviceOrders models.ServiceOrdersPage
 	endPointURL := r.manager.BuildURL(merchantServiceOrdersEndpoint, stonecode)
 
 	resp, err := r.manager.Request(http.Requester.Get, endPointURL, http.NewRequest())
@@ -63,5 +63,5 @@ func (r *serviceOrder) ByStoneCode(stonecode int) ([]models.ServiceOrder, errors
 		err = resp.JSON(&serviceOrders)
 	}
 
-	return serviceOrders, err
+	return &serviceOrders, err
 }

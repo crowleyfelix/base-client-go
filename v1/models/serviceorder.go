@@ -54,3 +54,13 @@ type ServiceOrder struct {
 	ServiceNumber   int    `json:"service_number"`
 	Status          string `json:"status"`
 }
+
+type ServiceOrdersPage struct {
+	ServiceOrders []ServiceOrder     `json:"orders_list"`
+	Paging        ServiceOrderPaging `json:"page"`
+}
+
+type ServiceOrderPaging struct {
+	Paging
+	TotalOfOrders int `json:"total_of_orders"`
+}
