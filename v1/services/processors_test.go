@@ -54,30 +54,8 @@ var _ = Describe("Processors", func() {
 			BeforeEach(func() {
 				resp.On("Ok").Return(true).Once()
 			})
-			Context("and failed on deserialize response", func() {
-				BeforeEach(func() {
-					resp.On("JSON", new(response)).Return(errors.NewSerializing()).Once()
-				})
-				It("should return serialization error", func() {
-					Expect(err).To(BeAssignableToTypeOf(new(errors.Serializing)))
-				})
-			})
-
-			Context("and success on deserialize response", func() {
-
-				var (
-					expectedResponse *mocks.Response
-				)
-
-				BeforeEach(func() {
-					resp.On("JSON", new(response)).Return(nil).Once()
-					monkey.Patch(http.SwitchBody, func(_ http.Response, _ []byte) http.Response {
-						return expectedResponse
-					})
-				})
-				It("should switch response body for inner data", func() {
-					Expect(actualResponse).To(Equal(expectedResponse))
-				})
+			It("should not return an error", func() {
+				Expect(err).To(BeNil())
 			})
 		})
 	})

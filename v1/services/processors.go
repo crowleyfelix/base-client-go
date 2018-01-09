@@ -7,17 +7,10 @@ import (
 
 func processResponse(resp http.Response) (http.Response, errors.Error) {
 	var (
-		r   response
 		err errors.Error
 	)
 
-	if resp.Ok() {
-		if e := resp.JSON(&r); e == nil {
-			resp = http.SwitchBody(resp, r.Data)
-		} else {
-			err = errors.NewSerializing(e.Error())
-		}
-	} else {
+	if !resp.Ok() {
 		err = trackError(resp)
 	}
 
@@ -31,12 +24,12 @@ func trackError(resp http.Response) errors.Error {
 
 func errorMessages(resp http.Response) []string {
 	var messages []string
-	var r response
+	var r responseError
 	err := resp.JSON(&r)
 
 	if err == nil {
-		for _, e := range r.Errors {
-			messages = append(messages, e.Message)
+		for _, e := range r.ErrorList {
+			messages = append(messages, e.Reason)
 		}
 	}
 

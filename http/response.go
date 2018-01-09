@@ -42,7 +42,7 @@ func (r *response) Header() http.Header {
 	return r.Response.Header
 }
 func (r *response) JSON(obj interface{}) errors.Error {
-	err := r.JSON(obj)
+	err := r.Response.JSON(obj)
 	if err != nil {
 		return errors.NewSerializing(err.Error())
 	}
