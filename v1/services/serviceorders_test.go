@@ -1,8 +1,9 @@
 package services
 
 import (
-	"fmt"
+	"encoding/json"
 	"math/rand"
+	"reflect"
 	"strconv"
 
 	"github.com/bouk/monkey"
@@ -13,10 +14,11 @@ import (
 	"github.com/stone-payments/logistic-sdk-go/errors"
 	"github.com/stone-payments/logistic-sdk-go/http"
 	"github.com/stone-payments/logistic-sdk-go/http/mocks"
+	. "github.com/stone-payments/logistic-sdk-go/testing"
 	"github.com/stone-payments/logistic-sdk-go/v1/models"
 )
 
-var _ = Describe("Member", func() {
+var _ = Describe("ServiceOrder", func() {
 
 	var (
 		service  serviceOrder
@@ -33,48 +35,66 @@ var _ = Describe("Member", func() {
 
 		service = serviceOrder{manager}
 	})
-	AfterSuite(func() {
-		monkey.UnpatchAll()
-	})
+	AfterEach(func() { monkey.UnpatchAll() })
 
 	Describe("Get", func() {
 		//input
 		var (
-			id string
+			number int
 		)
 
 		var (
 			urlBuilded   = "builded"
-			requestError error
+			requestError errors.Error
 		)
 
 		//output
 		var (
 			data *models.ServiceOrder
-			err  error
+			err  errors.Error
 		)
 		BeforeEach(func() {
-			id = strconv.Itoa(rand.Int())
-			manager.On("BuildURL", "/v1/serviceorders/%v", id).
+			number = rand.Int()
+			manager.On("BuildURL", "/v1/serviceorders/%v", number).
 				Return(urlBuilded).Once()
-			manager.On("Request", mock.Anything, urlBuilded, mock.Anything).
-				Return(response, requestError).Once()
 		})
 		JustBeforeEach(func() {
-			data, err = service.Get(id)
+			data, err = service.Get(number)
 		})
 		Describe("When sending request", func() {
 			Context("and failed", func() {
 				BeforeEach(func() {
-					requestError = fmt.Errorf("falhou")
+					requestError = errors.NewSerializing()
+					manager.On("Request", mock.Anything, urlBuilded, mock.Anything).
+						Return(response, requestError).Once()
 				})
 				It("should return an error", func() {
-					Expect(err).ToNot(BeNil())
+					Expect(err).To(Equal(requestError))
 				})
 			})
 			Context("and success", func() {
-				It("should return service order", func() {
 
+				var (
+					expected models.ServiceOrder
+				)
+
+				BeforeEach(func() {
+					requestError = nil
+					manager.On("Request", mock.Anything, urlBuilded, mock.Anything).
+						Return(response, requestError).Once()
+					LoadJSON("testresources/serviceorder.json", &expected)
+
+					monkey.PatchInstanceMethod(reflect.TypeOf(response), "JSON", func(_ *mocks.Response, obj interface{}) errors.Error {
+						data := File("testresources/serviceorder.json")
+
+						err := json.Unmarshal(data, &obj)
+						Expect(err).To(BeNil())
+						return nil
+					})
+				})
+				It("should return service order", func() {
+					Expect(data).To(Equal(&expected))
+					Expect(err).To(BeNil())
 				})
 			})
 		})
@@ -82,27 +102,25 @@ var _ = Describe("Member", func() {
 	Describe("ByStoneCode", func() {
 		//input
 		var (
-			stonecode int
+			stonecode string
 		)
 
 		//context
 		var (
 			urlBuilded   = "builded"
-			requestError error
+			requestError errors.Error
 		)
 
 		//output
 		var (
-			data []models.ServiceOrder
+			data *models.ServiceOrdersPage
 			err  error
 		)
 
 		BeforeEach(func() {
-			stonecode = rand.Int()
+			stonecode = strconv.Itoa(rand.Int())
 			manager.On("BuildURL", "/v1/merchants/%v/serviceorders", stonecode).
 				Return(urlBuilded).Once()
-			manager.On("Request", mock.Anything, urlBuilded, mock.Anything).
-				Return(response, requestError).Once()
 		})
 		JustBeforeEach(func() {
 			data, err = service.ByStoneCode(stonecode)
@@ -110,15 +128,37 @@ var _ = Describe("Member", func() {
 		Context("When sending request", func() {
 			Context("and failed", func() {
 				BeforeEach(func() {
-					requestError = fmt.Errorf("falhou")
+					requestError = errors.NewSerializing()
+					manager.On("Request", mock.Anything, urlBuilded, mock.Anything).
+						Return(response, requestError).Once()
 				})
 				It("should return an error", func() {
-					Expect(err).ToNot(BeNil())
+					Expect(err).To(Equal(requestError))
 				})
 			})
 			Context("and success", func() {
-				It("should return service orders", func() {
 
+				var (
+					expected models.ServiceOrdersPage
+				)
+
+				BeforeEach(func() {
+					requestError = nil
+					manager.On("Request", mock.Anything, urlBuilded, mock.Anything).
+						Return(response, requestError).Once()
+					LoadJSON("testresources/serviceorders.json", &expected)
+
+					monkey.PatchInstanceMethod(reflect.TypeOf(response), "JSON", func(_ *mocks.Response, obj interface{}) errors.Error {
+						data := File("testresources/serviceorders.json")
+
+						err := json.Unmarshal(data, &obj)
+						Expect(err).To(BeNil())
+						return nil
+					})
+				})
+				It("should return service orders", func() {
+					Expect(data).To(Equal(&expected))
+					Expect(err).To(BeNil())
 				})
 			})
 		})
@@ -133,20 +173,28 @@ var _ = Describe("Member", func() {
 		//context
 		var (
 			urlBuilded   = "builded"
-			requestError error
+			requestError errors.Error
+			params       map[string]string
 		)
 
 		//output
 		var (
-			data []models.ServiceOrder
+			data *models.ServiceOrdersPage
 			err  errors.Error
 		)
 
 		BeforeEach(func() {
 			manager.On("BuildURL", "/v1/serviceorders").
 				Return(urlBuilded).Once()
-			manager.On("Request", mock.Anything, urlBuilded, mock.Anything).
-				Return(response, requestError).Once()
+
+			params = map[string]string{
+				"param": "value",
+			}
+			monkey.Patch(http.ToMap, func(obj interface{}) map[string]string {
+				Expect(obj).To(BeAssignableToTypeOf(filters))
+				return params
+			})
+			request.On("SetParams", params).Once()
 		})
 		JustBeforeEach(func() {
 			data, err = service.List(filters)
@@ -154,15 +202,37 @@ var _ = Describe("Member", func() {
 		Context("When sending request", func() {
 			Context("and failed", func() {
 				BeforeEach(func() {
-					requestError = fmt.Errorf("falhou")
+					requestError = errors.NewSerializing()
+					manager.On("Request", mock.Anything, urlBuilded, mock.Anything).
+						Return(response, requestError).Once()
 				})
 				It("should return an error", func() {
-					Expect(err).ToNot(BeNil())
+					Expect(err).To(Equal(requestError))
 				})
 			})
 			Context("and success", func() {
-				It("should return service orders", func() {
 
+				var (
+					expected models.ServiceOrdersPage
+				)
+
+				BeforeEach(func() {
+					requestError = nil
+					manager.On("Request", mock.Anything, urlBuilded, mock.Anything).
+						Return(response, requestError).Once()
+					LoadJSON("testresources/serviceorders.json", &expected)
+
+					monkey.PatchInstanceMethod(reflect.TypeOf(response), "JSON", func(_ *mocks.Response, obj interface{}) errors.Error {
+						data := File("testresources/serviceorders.json")
+
+						err := json.Unmarshal(data, &obj)
+						Expect(err).To(BeNil())
+						return nil
+					})
+				})
+				It("should return service orders", func() {
+					Expect(data).To(Equal(&expected))
+					Expect(err).To(BeNil())
 				})
 			})
 		})

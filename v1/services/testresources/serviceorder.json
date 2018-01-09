@@ -1,0 +1,49 @@
+{
+    "allowance": false,
+    "cancellation_reason": "Cancelada pelo contratante",
+    "class_": "GLOBAL",
+    "client": {
+        "address": {
+            "city": "SAO PAULO",
+            "complement": "ANDAR 12 CONJ 1206",
+            "country": "BRASIL",
+            "district": "BRIGADEIRO FARIA LIMA",
+            "district_number": "1811",
+            "district_type": "Avenida",
+            "neighborhood": "JARDIM PAULISTANO",
+            "region": "R1 - ATÉ 30 KM DA CAPITAL",
+            "state": "SP",
+            "zipcode": "01452-001"
+        },
+        "contact": "Claudio Melo",
+        "document_number": "16.501.555/0001-57",
+        "document_type": "CNPJ",
+        "name": "Stoninho Teste",
+        "opening_hours": "DIA SEMANA",
+        "phone_number": "1130319234",
+        "stone_code": "192489630"
+    },
+    "contractor": "STONE PAGAMENTOS",
+    "date_attendance": "24/12/2015 10:26:19",
+    "date_modification": "02/02/2016 19:00:00",
+    "kit": {},
+    "limit_date": "27/11/2015 18:00:00",
+    "limit_date_client": "27/11/2015 18:00:00",
+    "new_chip": {},
+    "new_terminal": {
+        "model": "PPC 920",
+        "technology": "SERIAL-USB"
+    },
+    "number_of_revisits": 0,
+    "old_chip": {},
+    "old_terminal": {},
+    "opening_date": "19/11/2015 19:29:51",
+    "opening_remark": "OS DE TESTE",
+    "operator": {},
+    "operator_company": "GLOBAL AUTOMACAO ",
+    "provider": "GLOBAL AUTOMACAO ",
+    "service": "INSTALAÇÃO PINPAD",
+    "service_group": "INSTALAÇÃO",
+    "service_number": 57924,
+    "status": "CANCELADA"
+}
