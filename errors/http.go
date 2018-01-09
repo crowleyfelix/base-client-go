@@ -6,7 +6,7 @@ type NotFound struct {
 	httpError
 }
 
-func NewNotFound(messages ...string) HTTPError {
+func NewNotFound(messages ...string) *NotFound {
 	return &NotFound{
 		httpError{
 			http.StatusNotFound,
@@ -19,7 +19,7 @@ type BadRequest struct {
 	httpError
 }
 
-func NewBadRequest(messages ...string) HTTPError {
+func NewBadRequest(messages ...string) *BadRequest {
 	return &BadRequest{
 		httpError{
 			http.StatusBadRequest,
@@ -32,7 +32,7 @@ type InternalServer struct {
 	httpError
 }
 
-func NewInternalServer(messages ...string) HTTPError {
+func NewInternalServer(messages ...string) *InternalServer {
 	return &InternalServer{
 		httpError{
 			http.StatusInternalServerError,
@@ -45,7 +45,7 @@ type Unauthorized struct {
 	httpError
 }
 
-func NewUnauthorized(messages ...string) HTTPError {
+func NewUnauthorized(messages ...string) *Unauthorized {
 	return &Unauthorized{
 		httpError{
 			http.StatusUnauthorized,
@@ -58,7 +58,7 @@ type Forbidden struct {
 	httpError
 }
 
-func NewForbidden(messages ...string) HTTPError {
+func NewForbidden(messages ...string) *Forbidden {
 	return &Forbidden{
 		httpError{
 			http.StatusForbidden,
@@ -71,7 +71,7 @@ type UnprocessableEntity struct {
 	httpError
 }
 
-func NewUnprocessableEntity(messages ...string) HTTPError {
+func NewUnprocessableEntity(messages ...string) *UnprocessableEntity {
 	return &UnprocessableEntity{
 		httpError{
 			http.StatusUnprocessableEntity,
@@ -84,7 +84,7 @@ type Unavailable struct {
 	httpError
 }
 
-func NewUnavailable(messages ...string) HTTPError {
+func NewUnavailable(messages ...string) *Unavailable {
 	return &Unavailable{
 		httpError{
 			http.StatusServiceUnavailable,
