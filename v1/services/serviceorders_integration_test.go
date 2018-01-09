@@ -37,9 +37,9 @@ var _ = Describe("ServiceOrder Integration", func() {
 			actual, err = service.Get(page.ServiceOrders[0].ServiceNumber)
 		})
 		Context("When id passed", func() {
-			It("Should return service order", func() {
-				Expect(actual).ShouldNot(BeNil())
-				Expect(err).Should(BeNil())
+			It("should return service order", func() {
+				Expect(actual).ToNot(BeNil())
+				Expect(err).To(BeNil())
 			})
 		})
 	})
@@ -53,9 +53,28 @@ var _ = Describe("ServiceOrder Integration", func() {
 			actual, err = service.ByStoneCode(page.ServiceOrders[0].Client.StoneCode)
 		})
 		Context("When stonecode passed", func() {
-			It("Should return service orders", func() {
-				Expect(actual).ShouldNot(BeNil())
-				Expect(err).Should(BeNil())
+			It("should return service orders", func() {
+				Expect(actual).ToNot(BeNil())
+				Expect(err).To(BeNil())
+			})
+		})
+	})
+
+	Describe("List", func() {
+		var (
+			actual *models.ServiceOrdersPage
+			err    errors.Error
+		)
+		BeforeEach(func() {
+			filters := &models.ServiceOrderFilters{
+				StoneCode: "bob",
+			}
+			actual, err = service.List(filters)
+		})
+		Context("When invalid stonecode passed", func() {
+			It("should return an error", func() {
+				Expect(actual).To(BeNil())
+				Expect(err).ToNot(BeNil())
 			})
 		})
 	})

@@ -42,7 +42,10 @@ func (r *serviceOrder) List(filters *models.ServiceOrderFilters) (*models.Servic
 	endPointURL := r.manager.BuildURL(serviceOrdersEndpoint)
 
 	options := http.NewRequest()
-	options.SetParams(http.ToMap(filters))
+
+	if filters != nil {
+		options.SetParams(http.ToMap(*filters))
+	}
 
 	resp, err := r.manager.Request(http.Requester.Get, endPointURL, options)
 
