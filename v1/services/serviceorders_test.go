@@ -6,10 +6,10 @@ import (
 	"strconv"
 
 	"github.com/bouk/monkey"
+	"github.com/stretchr/testify/mock"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.com/stone-payments/logistic-sdk-go"
 	"github.com/stone-payments/logistic-sdk-go/errors"
 	"github.com/stone-payments/logistic-sdk-go/http"
 	"github.com/stone-payments/logistic-sdk-go/http/mocks"
@@ -19,25 +19,19 @@ import (
 var _ = Describe("Member", func() {
 
 	var (
-		baseURL   = "http://url"
-		requester = new(mocks.Requestable)
-		request   = new(mocks.Request)
-		response  *mocks.Response
+		service  serviceOrder
+		manager  = new(mocks.Manager)
+		request  = new(mocks.Request)
+		response *mocks.Response
 	)
 
-	var service serviceOrder
 	BeforeEach(func() {
-		logisticsdk.RegisterRequester(requester)
 		monkey.Patch(http.NewRequest, func() http.Request {
 			return request
 		})
 		response = new(mocks.Response)
 
-		service = serviceOrder{
-			&manager{
-				baseURL: baseURL,
-			},
-		}
+		service = serviceOrder{manager}
 	})
 	AfterSuite(func() {
 		monkey.UnpatchAll()
@@ -50,6 +44,7 @@ var _ = Describe("Member", func() {
 		)
 
 		var (
+			urlBuilded   = "builded"
 			requestError error
 		)
 
@@ -58,14 +53,15 @@ var _ = Describe("Member", func() {
 			data *models.ServiceOrder
 			err  error
 		)
-		JustBeforeEach(func() {
-			data, err = service.Get(id)
-		})
 		BeforeEach(func() {
 			id = strconv.Itoa(rand.Int())
-			url := fmt.Sprintf("%s/v1/serviceorders/%s", baseURL, id)
-			requester.On("Get", url, request).
+			manager.On("BuildURL", "/v1/serviceorders/%v", id).
+				Return(urlBuilded).Once()
+			manager.On("Request", mock.Anything, urlBuilded, mock.Anything).
 				Return(response, requestError).Once()
+		})
+		JustBeforeEach(func() {
+			data, err = service.Get(id)
 		})
 		Describe("When sending request", func() {
 			Context("and failed", func() {
@@ -91,6 +87,7 @@ var _ = Describe("Member", func() {
 
 		//context
 		var (
+			urlBuilded   = "builded"
 			requestError error
 		)
 
@@ -100,14 +97,15 @@ var _ = Describe("Member", func() {
 			err  error
 		)
 
-		JustBeforeEach(func() {
-			data, err = service.ByStoneCode(stonecode)
-		})
 		BeforeEach(func() {
 			stonecode = rand.Int()
-			url := fmt.Sprintf("%s/v1/merchants/%d/serviceorders", baseURL, stonecode)
-			requester.On("Get", url, request).
-				Return(response).Once()
+			manager.On("BuildURL", "/v1/merchants/%v/serviceorders", stonecode).
+				Return(urlBuilded).Once()
+			manager.On("Request", mock.Anything, urlBuilded, mock.Anything).
+				Return(response, requestError).Once()
+		})
+		JustBeforeEach(func() {
+			data, err = service.ByStoneCode(stonecode)
 		})
 		Context("When sending request", func() {
 			Context("and failed", func() {
@@ -134,6 +132,7 @@ var _ = Describe("Member", func() {
 
 		//context
 		var (
+			urlBuilded   = "builded"
 			requestError error
 		)
 
@@ -143,13 +142,14 @@ var _ = Describe("Member", func() {
 			err  errors.Error
 		)
 
+		BeforeEach(func() {
+			manager.On("BuildURL", "/v1/serviceorders").
+				Return(urlBuilded).Once()
+			manager.On("Request", mock.Anything, urlBuilded, mock.Anything).
+				Return(response, requestError).Once()
+		})
 		JustBeforeEach(func() {
 			data, err = service.List(filters)
-		})
-		BeforeEach(func() {
-			url := fmt.Sprintf("%s/v1/serviceorders", baseURL)
-			requester.On("Get", url, request).
-				Return(response).Once()
 		})
 		Context("When sending request", func() {
 			Context("and failed", func() {

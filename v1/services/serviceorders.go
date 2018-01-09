@@ -26,7 +26,7 @@ func NewServiceOrder(url string) ServiceOrder {
 
 func (r *serviceOrder) Get(id string) (*models.ServiceOrder, errors.Error) {
 	var serviceOrder models.ServiceOrder
-	endPointURL := r.manager.BuildURL(serviceOrdersEndpoint, id)
+	endPointURL := r.manager.BuildURL(serviceOrderEndpoint, id)
 
 	resp, err := r.manager.Request(http.Requester.Get, endPointURL, http.NewRequest())
 
