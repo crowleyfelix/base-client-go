@@ -12,14 +12,16 @@ func processResponse(resp http.Response) (http.Response, errors.Error) {
 	)
 
 	if resp.Ok() {
-		if e := resp.JSON(&r); e != nil {
+		if e := resp.JSON(&r); e == nil {
+			resp = http.SwitchBody(resp, r.Data)
+		} else {
 			err = errors.NewSerializing(e.Error())
 		}
 	} else {
 		err = trackError(resp)
 	}
 
-	return http.SwitchBody(resp, r.Data), err
+	return resp, err
 }
 
 func trackError(resp http.Response) errors.Error {
