@@ -56,13 +56,13 @@ windows:
 	cd - >/dev/null
 
 test:
-	ginkgo -gcflags=-l ./...	
+	@ginkgo -gcflags=-l ./...	
 
 integrationtest:
-	ginkgo -gcflags=-l -tags=integration ./...
+	@ginkgo -gcflags=-l -tags=integration ./...
 
 coverage: 
-	gocov test ./... | gocov report
+	@gocov test ./... | gocov report
 
 mocks:
 	scripts/build_mocks
