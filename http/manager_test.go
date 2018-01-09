@@ -26,7 +26,7 @@ var _ = Describe("Manager", func() {
 			Expect(manager.BuildURL("/%v/%v/%v", 1, 2, 3)).To(Equal(url + "/1/2/3"))
 		})
 	})
-	Describe("Request", func() {
+	PDescribe("Request", func() {
 		Context("When request failed", func() {
 			It("should call OnRequest of external interceptors event", func() {
 
