@@ -17,7 +17,7 @@ type serviceOrder struct {
 	manager http.Manager
 }
 
-//NewServiceOrder is constructs ServiceOrder Service
+//NewServiceOrder constructs ServiceOrder Service
 func NewServiceOrder(url string) ServiceOrder {
 	return &serviceOrder{
 		manager: http.NewManager(url, http.NewInterceptor(nil, processResponse)),

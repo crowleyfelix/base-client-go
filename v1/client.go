@@ -21,9 +21,5 @@ func New(url string, secretKey string, clientApplicationKey string) Client {
 }
 
 func (c *client) ServiceOrder(user string) services.ServiceOrder {
-	return services.NewServiceOrder(c.url, &services.Credentials{
-		SecretKey:            c.secretKey,
-		User:                 user,
-		ClientApplicationKey: c.clientApplicationKey,
-	})
+	return services.NewServiceOrder(c.url)
 }
