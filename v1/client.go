@@ -10,14 +10,12 @@ type Client interface {
 }
 
 type client struct {
-	url                  string
-	secretKey            string
-	clientApplicationKey string
+	url string
 }
 
 //New constructs a new client
-func New(url string, secretKey string, clientApplicationKey string) Client {
-	return &client{url, secretKey, clientApplicationKey}
+func New(url string) Client {
+	return &client{url}
 }
 
 func (c *client) ServiceOrder(user string) services.ServiceOrder {

@@ -3,7 +3,7 @@ package models
 type ServiceOrder struct {
 	Allowance          bool   `json:"allowance"`
 	CancellationReason string `json:"cancellation_reason"`
-	Class              string `json:"class_"`
+	Class              string `json:"class"`
 	Client             Client `json:"client"`
 	Contractor         string `json:"contractor"`
 	DateAttendance     string `json:"date_attendance"`

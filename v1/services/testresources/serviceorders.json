@@ -3,7 +3,7 @@
         {
             "allowance": false,
             "cancellation_reason": "Abertura indevida",
-            "class_": "STONE REDIRECT",
+            "class": "STONE REDIRECT",
             "client": {
                 "address": {
                     "city": "SAO PAULO",
@@ -57,7 +57,7 @@
         },
         {
             "allowance": false,
-            "class_": "PRO ATIVO",
+            "class": "PRO ATIVO",
             "client": {
                 "address": {
                     "city": "SAO PAULO",
@@ -109,7 +109,7 @@
         {
             "allowance": false,
             "cancellation_reason": "Cancelada pelo contratante",
-            "class_": "GLOBAL",
+            "class": "GLOBAL",
             "client": {
                 "address": {
                     "city": "SAO PAULO",
@@ -350,7 +350,7 @@
         {
             "allowance": false,
             "cancellation_reason": "Cancelada pelo contratante",
-            "class_": "STONE REDIRECT",
+            "class": "STONE REDIRECT",
             "client": {
                 "address": {
                     "city": "SAO PAULO",
@@ -404,7 +404,7 @@
         {
             "allowance": false,
             "cancellation_reason": "Abertura indevida",
-            "class_": "STONE REDIRECT",
+            "class": "STONE REDIRECT",
             "client": {
                 "address": {
                     "city": "SAO PAULO",
@@ -452,7 +452,7 @@
         },
         {
             "allowance": false,
-            "class_": "TESTE",
+            "class": "TESTE",
             "client": {
                 "address": {
                     "city": "SAO PAULO",
