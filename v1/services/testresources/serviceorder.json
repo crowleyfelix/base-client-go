@@ -42,8 +42,17 @@
     "operator": {},
     "operator_company": "GLOBAL AUTOMACAO ",
     "provider": "GLOBAL AUTOMACAO ",
-    "service": "INSTALAÇÃO PINPAD",
-    "service_group": "INSTALAÇÃO",
+    "service": {
+        "code": "pinpad_installation",
+        "description": "INSTALAÇÃO PINPAD"
+    },
+    "service_group": {
+        "code": "installation",
+        "description": "INSTALAÇÃO"
+    },
     "service_number": 57924,
-    "status": "CANCELADA"
+    "status": {
+        "code": "cancelled",
+        "description": "CANCELADA"
+    }
 }
