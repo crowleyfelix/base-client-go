@@ -13,7 +13,7 @@ type ServiceOrderFilters struct {
 	ServiceGroup              *string `param:"service_group"`
 	Model                     *string `param:"model"`
 	SerialNumber              *string `param:"serial_number"`
-	ServiceNumber             *string `param:"service_number"`
+	ServiceNumber             *int    `param:"service_number"`
 	Provider                  *string `param:"provider"`
 	Reference                 *string `param:"reference"`
 	Service                   *string `param:"service"`
