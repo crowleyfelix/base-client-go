@@ -18,16 +18,16 @@ type ServiceOrder struct {
 	NumberOfRevisits int      `json:"number_of_revisits"`
 	OldChip          struct {
 	} `json:"old_chip"`
-	OldTerminal     Terminal `json:"old_terminal"`
-	OpeningDate     string   `json:"opening_date"`
-	OpeningRemark   string   `json:"opening_remark"`
-	Operator        Operator `json:"operator"`
-	OperatorCompany string   `json:"operator_company"`
-	Provider        string   `json:"provider"`
-	Service         string   `json:"service"`
-	ServiceGroup    string   `json:"service_group"`
-	ServiceNumber   int      `json:"service_number"`
-	Status          string   `json:"status"`
+	OldTerminal     Terminal   `json:"old_terminal"`
+	OpeningDate     string     `json:"opening_date"`
+	OpeningRemark   string     `json:"opening_remark"`
+	Operator        Operator   `json:"operator"`
+	OperatorCompany string     `json:"operator_company"`
+	Provider        string     `json:"provider"`
+	Service         Enumerated `json:"service"`
+	ServiceGroup    Enumerated `json:"service_group"`
+	ServiceNumber   int        `json:"service_number"`
+	Status          Enumerated `json:"status"`
 }
 
 type ServiceOrdersPage struct {

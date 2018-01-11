@@ -1,8 +1,8 @@
 package models
 
 type ServiceOrderFilters struct {
-	Page                      string `param:"page"`
-	Size                      string `param:"size"`
+	Page                      int    `param:"page"`
+	Size                      int    `param:"size"`
 	DocumentNumber            string `param:"document_number"`
 	City                      string `param:"city"`
 	StoneCode                 string `param:"stonecode"`
@@ -13,7 +13,7 @@ type ServiceOrderFilters struct {
 	ServiceGroup              string `param:"service_group"`
 	Model                     string `param:"model"`
 	SerialNumber              string `param:"serial_number"`
-	ServiceOrderNumber        string `param:"service_order_number"`
+	ServiceNumber             int    `param:"service_number"`
 	Provider                  string `param:"provider"`
 	Reference                 string `param:"reference"`
 	Service                   string `param:"service"`
