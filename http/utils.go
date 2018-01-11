@@ -33,8 +33,12 @@ func ToMap(obj interface{}) map[string]string {
 			if tag != "" {
 				if s, ok := value.Interface().(string); ok {
 					mapString[tag] = s
+				} else if ps, ok := value.Interface().(*string); ok && ps != nil {
+					mapString[tag] = *ps
 				} else if i, ok := value.Interface().(int); ok {
 					mapString[tag] = strconv.Itoa(i)
+				} else if pi, ok := value.Interface().(*int); ok && pi != nil {
+					mapString[tag] = strconv.Itoa(*pi)
 				}
 			}
 		}
