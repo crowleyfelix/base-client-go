@@ -10,7 +10,7 @@ type ServiceOrderFilters struct {
 	OperatorDocumentNumber    string `param:"operator_document_number"`
 	State                     string `param:"state"`
 	ClientGroup               string `param:"client_group"`
-	ClientService             string `param:"client_service"`
+	ServiceGroup              string `param:"service_group"`
 	Model                     string `param:"model"`
 	SerialNumber              string `param:"serial_number"`
 	ServiceOrderNumber        string `param:"service_order_number"`
