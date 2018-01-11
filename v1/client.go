@@ -6,7 +6,7 @@ import (
 
 //Client exposes the services to access logistic resources
 type Client interface {
-	ServiceOrder(user string) services.ServiceOrder
+	ServiceOrder() services.ServiceOrder
 }
 
 type client struct {
@@ -18,6 +18,6 @@ func New(url string) Client {
 	return &client{url}
 }
 
-func (c *client) ServiceOrder(user string) services.ServiceOrder {
+func (c *client) ServiceOrder() services.ServiceOrder {
 	return services.NewServiceOrder(c.url)
 }
