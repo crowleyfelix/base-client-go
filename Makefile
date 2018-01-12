@@ -1,68 +1,26 @@
-# The name of the executable (default is current directory name)
-TARGET := $(shell echo $${PWD\#\#*/})
-.DEFAULT_GOAL: $(TARGET)
+.PHONY: dep setup test coverage mocks 
 
-# These will be provided to the target
-VERSION := 1.0.0
-BUILD := `git rev-parse HEAD`
+dep:
+	@go get -t -v ./... \
+	github.com/onsi/ginkgo/ginkgo \
+	github.com/onsi/gomega/...  \
+	github.com/axw/gocov/gocov \
+	github.com/vektra/mockery/.../ \
+	github.com/alecthomas/gometalinter
 
-TEST_REPORT = tests.xml
+setup: dep
 
-# Use linker flags to provide version/build settings to the target
-LDFLAGS=-ldflags "-X=main.Version=$(VERSION) -X=main.Build=$(BUILD)"
+check: setup
+	@gometalinter ./... || true 
 
-# go source files, ignore vendor directory
-SRC = $(shell find . -type f -name '*.go' -not -path "./vendor/*")
-
-.PHONY: all build clean install uninstall fmt simplify check run
-
-all: check install
-
-$(TARGET): $(SRC)
-	@go build $(LDFLAGS) -o $(TARGET)
-
-build: $(TARGET)
-	@true
-
-clean:
-	@rm -f $(TARGET)
-
-install:
-	@go install $(LDFLAGS)
-
-uninstall: clean
-	@rm -f $$(which ${TARGET})
-
-fmt:
-	@gofmt -l -w $(SRC)
-
-simplify:
-	@gofmt -s -l -w $(SRC)
-
-check:
-	@test -z $(shell gofmt -l main.go | tee /dev/stderr) || echo "[WARN] Fix formatting issues with 'make fmt'"
-	@for d in $$(go list ./... | grep -v /vendor/); do golint $${d}; done
-	@go tool vet ${SRC}
-
-run: install
-	@$(TARGET)
-
-linux: 
-	GOOS=linux go build ${LDFLAGS} -o ${TARGET}-linux . ; \
-	cd - >/dev/null
-
-windows:
-	GOOS=windows go build ${LDFLAGS} -o ${TARGET}-windows.exe . ; \
-	cd - >/dev/null
-
-test:
+test: setup
 	@ginkgo -gcflags=-l ./...	
 
-integrationtest:
+integrationtest: setup
 	@ginkgo -gcflags=-l -tags=integration ./...
 
-coverage: 
+coverage: setup
 	@gocov test ./... | gocov report
 
-mocks:
+mocks: setup
 	scripts/build_mocks
