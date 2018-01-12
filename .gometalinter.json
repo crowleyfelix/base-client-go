@@ -1,0 +1,19 @@
+{
+    "Enable": [
+        "golint",
+        "vet",
+        "gotype",
+        "deadcode",
+        "gocyclo",
+        "varcheck",
+        "structcheck",
+        "maligned",
+        "megacheck",
+        "dupl",
+        "interfacer",
+        "goconst",
+        "lll",
+        "misspell",
+        "unparam"
+    ]
+}
