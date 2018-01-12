@@ -4,6 +4,11 @@ As mudanças feitas em cada release desse projeto serão comentadas em alto nív
 
 Modelo de documento baseado em [Semantic Versioning](http://semver.org/). Exemplos de como manipular este _markdown_ podem ser encontrados em [Keep a CHANGELOG](http://keepachangelog.com/).
 
-## [0.1.0](https://github.com/stone-payments/go_agent_api/tree/v0.1.0) - 2017-12-08
+## Unreleased
 ### Added
-- Primeira release
+- Engine de request
+- Serviço de ordens de serviço
+- Busca de ordem de serviço por numero do chamado
+- Busca de ordens de serviço de um cliente
+- Busca de ordens de serviço filtrada
+- Enums de status, service e service group
