@@ -8,7 +8,7 @@ import (
 	"github.com/levigross/grequests"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.com/stone-payments/logistic-sdk-go/errors"
+	"github.com/stone-payments/gologistic/errors"
 )
 
 var _ = Describe("Response", func() {

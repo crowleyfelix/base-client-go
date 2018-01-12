@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/levigross/grequests"
-	"github.com/stone-payments/logistic-sdk-go/errors"
+	"github.com/stone-payments/gologistic/errors"
 )
 
 //Response exposes http response methods

@@ -1,8 +1,8 @@
 package services
 
 import (
-	"github.com/stone-payments/logistic-sdk-go/errors"
-	"github.com/stone-payments/logistic-sdk-go/http"
+	"github.com/stone-payments/gologistic/errors"
+	"github.com/stone-payments/gologistic/http"
 )
 
 func processResponse(resp http.Response) (http.Response, errors.Error) {

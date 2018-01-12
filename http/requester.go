@@ -4,7 +4,7 @@ import (
 	"reflect"
 
 	"github.com/levigross/grequests"
-	"github.com/stone-payments/logistic-sdk-go/errors"
+	"github.com/stone-payments/gologistic/errors"
 )
 
 //Requestable is the interface that handles with http requests

@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/stone-payments/logistic-sdk-go/v1/services"
+	"github.com/stone-payments/gologistic/v1/services"
 )
 
 //Client exposes the services to access logistic resources

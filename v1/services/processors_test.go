@@ -5,9 +5,9 @@ import (
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.com/stone-payments/logistic-sdk-go/errors"
-	"github.com/stone-payments/logistic-sdk-go/http"
-	"github.com/stone-payments/logistic-sdk-go/http/mocks"
+	"github.com/stone-payments/gologistic/errors"
+	"github.com/stone-payments/gologistic/http"
+	"github.com/stone-payments/gologistic/http/mocks"
 )
 
 var _ = Describe("Processors", func() {

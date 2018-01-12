@@ -5,9 +5,9 @@ package services
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.com/stone-payments/logistic-sdk-go/errors"
-	. "github.com/stone-payments/logistic-sdk-go/testing"
-	"github.com/stone-payments/logistic-sdk-go/v1/models"
+	"github.com/stone-payments/gologistic/errors"
+	. "github.com/stone-payments/gologistic/testing"
+	"github.com/stone-payments/gologistic/v1/models"
 )
 
 var _ = Describe("ServiceOrder Integration", func() {

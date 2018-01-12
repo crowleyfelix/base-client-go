@@ -1,6 +1,6 @@
 package http
 
-import "github.com/stone-payments/logistic-sdk-go/errors"
+import "github.com/stone-payments/gologistic/errors"
 
 //Interceptor exposes interceptor methods
 type Interceptor interface {

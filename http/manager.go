@@ -3,7 +3,7 @@ package http
 import (
 	"fmt"
 
-	"github.com/stone-payments/logistic-sdk-go/errors"
+	"github.com/stone-payments/gologistic/errors"
 )
 
 //Manager exposes request manager methods

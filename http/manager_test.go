@@ -3,7 +3,7 @@ package http
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.com/stone-payments/logistic-sdk-go/errors"
+	"github.com/stone-payments/gologistic/errors"
 )
 
 type mockInterceptor struct {

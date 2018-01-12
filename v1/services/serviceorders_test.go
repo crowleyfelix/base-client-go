@@ -11,11 +11,11 @@ import (
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.com/stone-payments/logistic-sdk-go/errors"
-	"github.com/stone-payments/logistic-sdk-go/http"
-	"github.com/stone-payments/logistic-sdk-go/http/mocks"
-	. "github.com/stone-payments/logistic-sdk-go/testing"
-	"github.com/stone-payments/logistic-sdk-go/v1/models"
+	"github.com/stone-payments/gologistic/errors"
+	"github.com/stone-payments/gologistic/http"
+	"github.com/stone-payments/gologistic/http/mocks"
+	. "github.com/stone-payments/gologistic/testing"
+	"github.com/stone-payments/gologistic/v1/models"
 )
 
 var _ = Describe("ServiceOrder", func() {
