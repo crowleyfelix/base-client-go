@@ -2,18 +2,19 @@
     "Enable": [
         "golint",
         "vet",
-        "gotype",
-        "deadcode",
+        "megacheck",
+        "goconst",
         "gocyclo",
+        "unparam",
+        "gotype",
         "varcheck",
+        "deadcode",
         "structcheck",
         "maligned",
-        "megacheck",
-        "dupl",
         "interfacer",
-        "goconst",
-        "lll",
-        "misspell",
-        "unparam"
+        "misspell"
+    ],
+    "Skip": [
+        "mocks"
     ]
 }
