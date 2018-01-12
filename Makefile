@@ -11,7 +11,10 @@ dep:
 setup: dep
 
 check: setup
-	@gometalinter ./... || true 
+	@gometalinter --fast ./... || true 
+
+deepcheck: setup
+	@gometalinter ./... || true
 
 test: setup
 	@ginkgo -gcflags=-l ./...	
