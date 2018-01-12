@@ -32,14 +32,23 @@ func ToMap(obj interface{}) map[string]string {
 
 			tag := field.Tag.Get(tagName)
 			if tag != "" {
-				if s, ok := value.Interface().(string); ok {
-					mapString[tag] = s
-				} else if ps, ok := value.Interface().(*string); ok && ps != nil {
-					mapString[tag] = *ps
-				} else if i, ok := value.Interface().(int); ok {
-					mapString[tag] = strconv.Itoa(i)
-				} else if pi, ok := value.Interface().(*int); ok && pi != nil {
-					mapString[tag] = strconv.Itoa(*pi)
+				switch v := value.Interface().(type) {
+				case string:
+					mapString[tag] = v
+					break
+				case *string:
+					if v != nil {
+						mapString[tag] = *v
+					}
+					break
+				case int:
+					mapString[tag] = strconv.Itoa(v)
+					break
+				case *int:
+					if v != nil {
+						mapString[tag] = strconv.Itoa(*v)
+					}
+					break
 				}
 			}
 		}
