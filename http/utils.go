@@ -9,6 +9,7 @@ import (
 
 const tagName = "param"
 
+//SwitchBody switches response body data
 func SwitchBody(resp Response, data []byte) Response {
 	resp.ClearInternalBuffer()
 	buf := ioutil.NopCloser(bytes.NewBuffer(data))

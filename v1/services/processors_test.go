@@ -56,6 +56,7 @@ var _ = Describe("Processors", func() {
 			})
 			It("should not return an error", func() {
 				Expect(err).To(BeNil())
+				Expect(actualResponse).To(Equal(resp))
 			})
 		})
 	})

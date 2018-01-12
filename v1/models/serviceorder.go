@@ -1,5 +1,6 @@
 package models
 
+//ServiceOrder represents main entity
 type ServiceOrder struct {
 	Allowance          bool   `json:"allowance"`
 	CancellationReason string `json:"cancellation_reason"`
@@ -30,11 +31,13 @@ type ServiceOrder struct {
 	Status          Enumerated `json:"status"`
 }
 
+//ServiceOrdersPage is a container of service orders
 type ServiceOrdersPage struct {
 	ServiceOrders []ServiceOrder     `json:"orders_list"`
 	Paging        ServiceOrderPaging `json:"page"`
 }
 
+//ServiceOrderPaging holds service orders page data
 type ServiceOrderPaging struct {
 	Paging
 	TotalOfOrders int `json:"total_of_orders"`

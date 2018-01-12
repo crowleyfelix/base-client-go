@@ -1,5 +1,6 @@
 package models
 
+//ServiceOrderFilters contains filter fields to service order request
 type ServiceOrderFilters struct {
 	Page                      *int    `param:"page"`
 	Size                      *int    `param:"size"`

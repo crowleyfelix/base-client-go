@@ -1,5 +1,6 @@
 package models
 
+//Address represents an address model
 type Address struct {
 	City           string `json:"city"`
 	Complement     string `json:"complement"`

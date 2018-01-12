@@ -1,5 +1,6 @@
 package models
 
+//Client represents an client model
 type Client struct {
 	Address        Address `json:"address"`
 	Contact        string  `json:"contact"`

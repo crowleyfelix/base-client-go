@@ -33,22 +33,22 @@ func (s *manager) Request(method RequestMethod, url string, request Request, int
 		request = interceptor.OnRequest(request)
 	}
 
-	if resp, e := method(url, request); e != nil {
+	resp, e := method(url, request)
+	if e != nil {
 		return nil, errors.NewCallout(e.Error())
 
-	} else {
-
-		var err errors.Error
-		for _, interceptor := range interceptors {
-			resp, err = interceptor.OnResponse(resp)
-
-			if err != nil {
-				break
-			}
-		}
-
-		return resp, err
 	}
+
+	var err errors.Error
+	for _, interceptor := range interceptors {
+		resp, err = interceptor.OnResponse(resp)
+
+		if err != nil {
+			break
+		}
+	}
+
+	return resp, err
 }
 
 func (s *manager) allInterceptors(interceptors ...Interceptor) []Interceptor {
