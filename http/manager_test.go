@@ -7,7 +7,7 @@ import (
 )
 
 type mockInterceptor struct {
-	err              errors.Erro
+	err              errors.Error
 	onRequestCalled  bool
 	onResponseCalled bool
 }
