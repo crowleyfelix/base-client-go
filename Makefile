@@ -13,6 +13,9 @@ dep:
 	github.com/vektra/mockery/.../ \
 	github.com/alecthomas/gometalinter
 
+fmt:
+	@go fmt ./...
+
 setup: dep
 	@cp -f $(HOOKS_PATH)/** .git/hooks
 	@find . -name $(ENV_FILE) | grep -q "." || cp $(ENV_FILE).example $(ENV_FILE)	

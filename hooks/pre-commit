@@ -1,1 +1,1 @@
-make check
+make fmt && make check
