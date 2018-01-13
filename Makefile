@@ -1,6 +1,7 @@
-ENVFILE=.env
-HOOKSPATH=hooks
-LINTFILES=$(shell git diff-index --cached --name-only HEAD | xargs printf -- '--include=%s\n')
+ENV_FILE=.env
+HOOKS_PATH=hooks
+DIFF_FILES=$(shell git diff-index --cached --name-only HEAD | xargs printf -- '--include=%s\n')
+MODIFIED_FILES=$(shell git ls-files -m | xargs printf -- '--include=%s\n')
 
 .PHONY: dep setup test coverage mocks .env env
 
@@ -13,14 +14,14 @@ dep:
 	github.com/alecthomas/gometalinter
 
 setup: dep
-	@cp -f $(HOOKSPATH)/** .git/hooks
-	@find . -name $(ENVFILE) | grep -q "." || cp $(ENVFILE).example $(ENVFILE)	
+	@cp -f $(HOOKS_PATH)/** .git/hooks
+	@find . -name $(ENV_FILE) | grep -q "." || cp $(ENV_FILE).example $(ENV_FILE)	
 
 check: setup
-	@gometalinter ./... --fast $(LINTFILES)
+	@gometalinter ./... --fast $(MODIFIED_FILES)
 
 deepcheck: setup
-	@gometalinter ./... $(LINTFILES)
+	@gometalinter ./... $(DIFF_FILES)
 
 fullcheck: setup
 	gometalinter ./...
