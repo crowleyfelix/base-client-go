@@ -1,7 +1,7 @@
 ENV_FILE=.env
 HOOKS_PATH=hooks
-DIFF_FILES=$(shell git diff-index --cached --name-only HEAD | xargs printf -- '--include=%s\n')
-MODIFIED_FILES=$(shell git status -s | awk '{if ($$1 == "M" || $$1 == "??" || $$1 == "A") print $$2}' | xargs printf -- '--include=%s\n')
+DIFF_FILES=$(shell git diff-index --cached --name-only develop | xargs printf -- '--include=%s\n')
+MODIFIED_FILES=$(shell git diff-index --cached --name-only HEAD | xargs printf -- '--include=%s\n')
 
 .PHONY: dep setup test coverage mocks .env env
 
