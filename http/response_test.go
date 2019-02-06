@@ -1,12 +1,11 @@
 package http
 
 import (
+	"io"
+	"io/ioutil"
+	"strings"
 	"net/http"
-	"reflect"
-
-	"github.com/bouk/monkey"
 	"github.com/crowleyfelix/base-client-go/errors"
-	"github.com/levigross/grequests"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -14,59 +13,55 @@ import (
 var _ = Describe("Response", func() {
 
 	var (
-		resp *response
+		resp *Response
 	)
 
 	BeforeEach(func() {
-		resp = new(response)
-		resp.Response = new(grequests.Response)
-	})
-	AfterEach(func() {
-		monkey.UnpatchAll()
+		resp = &Response{
+			Response: new(http.Response),
+		}
 	})
 
 	Describe("Ok", func() {
-		It("should call grequest response Ok method", func() {
-			resp.Response.Ok = true
-			Expect(resp.Ok()).To(BeTrue())
+		Context("When status code is minor than 200", func () {
+			It("should return false", func() {
+				resp.StatusCode = 199
+				Expect(resp.Ok()).To(BeFalse())
+			})
 		})
-	})
-	Describe("Error", func() {
-		It("should call grequest response Error method", func() {
-			resp.Response.Error = errors.Build(0)
-			Expect(resp.Error()).To(Equal(resp.Response.Error))
+		Context("When status code is between 200 and 400", func () {
+			It("should return true", func() {
+				resp.StatusCode = 200
+				Expect(resp.Ok()).To(BeTrue())
+			})
 		})
-	})
-	Describe("RawResponse", func() {
-		It("should call grequest response RawResponse method", func() {
-			resp.Response.RawResponse = new(http.Response)
-			Expect(resp.RawResponse()).To(Equal(resp.Response.RawResponse))
-		})
-	})
-	Describe("StatusCode", func() {
-		It("should call grequest response StatusCode method", func() {
-			resp.Response.StatusCode = 500
-			Expect(resp.StatusCode()).To(Equal(resp.Response.StatusCode))
-		})
-	})
-	Describe("Header", func() {
-		It("should call grequest response Header method", func() {
-			resp.Response.Header = make(http.Header)
-			Expect(resp.Header()).To(Equal(resp.Response.Header))
+		Context("When status code is greater than 399", func () {
+			It("should return true", func() {
+				resp.StatusCode = 400
+				Expect(resp.Ok()).To(BeFalse())
+			})
 		})
 	})
 	Describe("JSON", func() {
 		var (
 			err errors.Error
+			body io.ReadCloser
+			actual string
 		)
-		BeforeEach(func() {
-			monkey.PatchInstanceMethod(reflect.TypeOf(new(grequests.Response)), "JSON", func(_ *grequests.Response, obj interface{}) error {
-				return err
-			})
+
+		JustBeforeEach(func(){
+			resp.Body = body
+			err = resp.JSON(&actual)
 		})
-		It("should call grequest response JSON method", func() {
-			err = errors.NewSerializing()
-			Expect(resp.JSON(make(map[string]string))).To(Equal(err))
+		
+		Context("When body is json desserializable", func () {
+			BeforeEach(func() {
+				body = ioutil.NopCloser(strings.NewReader("\"teste\""))
+			})
+			It("should load json data", func() {
+				Expect(err).To(BeNil())
+				Expect(actual).To(Equal("teste"))		
+			})
 		})
 	})
 })

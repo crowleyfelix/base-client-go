@@ -1,49 +1,86 @@
 package http
 
 import (
-	"github.com/levigross/grequests"
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
 )
 
-//Request exposes request request methods
-type Request interface {
-	SetHeaders(map[string]string)
-	Headers() map[string]string
-	SetParams(map[string]string)
-	Params() map[string]string
-	SetJSON(interface{})
-	JSON() interface{}
+const (
+	//GetMethod HTTTP Get Methjod
+	GetMethod RequestMethod = "GET"
+	//PostMethod HTTTP Post Methjod
+	PostMethod RequestMethod = "POST"
+	//PutMethod HTTTP Put Methjod
+	PutMethod RequestMethod = "PUT"
+	//DeleteMethod HTTTP Delete Methjod
+	DeleteMethod RequestMethod = "DELETE"
+)
+
+//RequestMethod represents a http request method
+type RequestMethod string
+
+//Request represents a http request
+type Request struct {
+	*http.Request
 }
 
-//NewRequest constructs implementation of Request
-func NewRequest() Request {
-	return new(request)
+//RequestBuilder exposes methods of a http request method
+type RequestBuilder interface {
+	SetBaseURL(baseURL string)
+	SetBaseHeader(header map[string]string)
+	Build(method RequestMethod, endpoint string, body io.Reader, params ...interface{}) (*Request, error)
+	BuildJSON(method RequestMethod, endpoint string, data interface{}, params ...interface{}) (*Request, error)
 }
 
-//request is the struct wrapper of grequests struct
-type request struct {
-	grequests.RequestOptions
+//NewRequestBuilder creates a new request builder
+func NewRequestBuilder(baseURL string) RequestBuilder {
+	return &requestBuilder{baseURL: baseURL}
 }
 
-func (r *request) SetHeaders(headers map[string]string) {
-	r.RequestOptions.Headers = headers
+type requestBuilder struct {
+	baseURL    string
+	baseHeader map[string]string
 }
 
-func (r *request) Headers() map[string]string {
-	return r.RequestOptions.Headers
+func (r *requestBuilder) SetBaseURL(baseURL string) {
+	r.baseURL = baseURL
 }
 
-func (r *request) SetParams(params map[string]string) {
-	r.RequestOptions.Params = params
+func (r *requestBuilder) SetBaseHeader(header map[string]string) {
+	r.baseHeader = header
 }
 
-func (r *request) Params() map[string]string {
-	return r.RequestOptions.Params
+func (r *requestBuilder) Build(method RequestMethod, endpoint string, body io.Reader, params ...interface{}) (*Request, error) {
+	req, err := http.NewRequest(string(method), r.buildURL(endpoint, params...), body)
+
+	for k, v := range r.baseHeader {
+		req.Header.Add(k, v)
+	}
+
+	return &Request{req}, err
 }
 
-func (r *request) SetJSON(data interface{}) {
-	r.RequestOptions.JSON = data
+func (r *requestBuilder) BuildJSON(method RequestMethod, endpoint string, data interface{}, params ...interface{}) (*Request, error) {
+	blob, err := json.Marshal(data)
+
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := r.Build(method, endpoint, bytes.NewReader(blob), params...)
+
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", "application/json")
+
+	return req, err
 }
 
-func (r *request) JSON() interface{} {
-	return r.RequestOptions.JSON
+func (r *requestBuilder) buildURL(endpoint string, params ...interface{}) string {
+	return r.baseURL + fmt.Sprintf(endpoint, params...)
 }
