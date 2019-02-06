@@ -29,6 +29,10 @@ type Request struct {
 	*http.Request
 }
 
+func (req *Request) AddQuery(key, value string) {
+	req.URL.RawQuery += key + "=" + value
+}
+
 //RequestBuilder exposes methods of a http request method
 type RequestBuilder interface {
 	SetBaseURL(baseURL string)
