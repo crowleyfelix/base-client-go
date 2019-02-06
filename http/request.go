@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+
+	"github.com/crowleyfelix/base-client-go/errors"
 )
 
 const (
@@ -31,8 +33,8 @@ type Request struct {
 type RequestBuilder interface {
 	SetBaseURL(baseURL string)
 	SetBaseHeader(header map[string]string)
-	Build(method RequestMethod, endpoint string, body io.Reader, params ...interface{}) (*Request, error)
-	BuildJSON(method RequestMethod, endpoint string, data interface{}, params ...interface{}) (*Request, error)
+	Build(method RequestMethod, endpoint string, body io.Reader, params ...interface{}) (*Request, errors.Error)
+	BuildJSON(method RequestMethod, endpoint string, data interface{}, params ...interface{}) (*Request, errors.Error)
 }
 
 //NewRequestBuilder creates a new request builder
@@ -53,21 +55,25 @@ func (r *requestBuilder) SetBaseHeader(header map[string]string) {
 	r.baseHeader = header
 }
 
-func (r *requestBuilder) Build(method RequestMethod, endpoint string, body io.Reader, params ...interface{}) (*Request, error) {
+func (r *requestBuilder) Build(method RequestMethod, endpoint string, body io.Reader, params ...interface{}) (*Request, errors.Error) {
 	req, err := http.NewRequest(string(method), r.buildURL(endpoint, params...), body)
+
+	if err != nil {
+		return nil, errors.NewCallout(err.Error())
+	}
 
 	for k, v := range r.baseHeader {
 		req.Header.Add(k, v)
 	}
 
-	return &Request{req}, err
+	return &Request{req}, nil
 }
 
-func (r *requestBuilder) BuildJSON(method RequestMethod, endpoint string, data interface{}, params ...interface{}) (*Request, error) {
-	blob, err := json.Marshal(data)
+func (r *requestBuilder) BuildJSON(method RequestMethod, endpoint string, data interface{}, params ...interface{}) (*Request, errors.Error) {
+	blob, e := json.Marshal(data)
 
-	if err != nil {
-		return nil, err
+	if e != nil {
+		return nil, errors.NewSerializing(e.Error())
 	}
 
 	req, err := r.Build(method, endpoint, bytes.NewReader(blob), params...)
